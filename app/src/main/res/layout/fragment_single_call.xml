@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/fullcall_accept"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:text="接听" />
+
+    <Button
+        android:id="@+id/fullcall_reject"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:text="拒绝" />
+
+    <Button
+        android:id="@+id/fullcall_holdon"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:text="挂断"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/record_btn"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:text="录音"
+        android:visibility="gone" />
+    <Button
+        android:id="@+id/enable_outside_audio_btn"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:onClick="back"
+        android:text="外部语音传入" />
+
+</LinearLayout>

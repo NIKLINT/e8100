@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/acivityContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:keepScreenOn="true"
+    android:padding="10px">
+    tools:context=".ui.VoiceCallingFragment">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="160px"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_corner"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10px"
+        app:layout_constraintTop_toBottomOf="@+id/lblCallType"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <ImageView
+            android:id="@+id/imgCallType"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:layout_marginBottom="5px"
+            android:background="@drawable/ic_rxlogo"></ImageView>
+
+        <TextView
+            android:id="@+id/lblGroupID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5px"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="呼叫组:"
+            android:textColor="@color/fontcolor"
+            android:textSize="20px"></TextView>
+
+        <TextView
+            android:id="@+id/lblCallTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5px"
+            android:text="00:00"
+            android:textColor="@color/fontcolor"
+            android:textSize="20px">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/lblCallFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发言人:"
+            android:textColor="@color/fontcolor"
+            android:textSize="17px"></TextView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40px"
+        android:layout_height="40px"
+        android:layout_marginTop="-5px"
+        android:src="@drawable/talkui_icon_40x40"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="7dp"></ImageView>
+
+    <TextView
+        android:id="@+id/lblCallType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="10px"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="数字常规"
+        android:textColor="@color/titlefontcolor"
+        android:textDirection="firstStrong"
+        android:textIsSelectable="false"
+        android:textScaleX="1.1"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <com.visualizer.amplitude.AudioRecordView-->
+    <!--        android:id="@+id/audioRecordView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="36px"-->
+    <!--        android:layout_marginTop="4px"-->
+    <!--        app:chunkAlignTo="center"-->
+    <!--        app:chunkColor="#2279EC"-->
+    <!--        app:chunkMaxHeight="46px"-->
+    <!--        app:chunkMinHeight="2px"-->
+    <!--        app:chunkRoundedCorners="true"-->
+    <!--        app:chunkSoftTransition="true"-->
+    <!--        app:chunkSpace="2px"-->
+    <!--        app:chunkWidth="4px"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />-->
+    <jaygoo.widget.wlv.WaveLineView
+        android:id="@+id/audioRecordView"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:wlvBackgroundColor="@color/colorPrimary"
+        app:wlvFineLineWidth="1dp"
+        app:wlvMoveSpeed="290"
+        app:wlvSamplingSize="48"
+        app:wlvSensibility="10"
+        app:wlvThickLineWidth="3dp"
+        tools:layout_editor_absoluteX="13dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/audioRecordView">
+        <!--        <Button-->
+        <!--            android:layout_width="44px"-->
+        <!--            android:layout_height="44px"-->
+        <!--            android:visibility="invisible"-->
+        <!--            android:background="@drawable/circlebutton_green"-->
+        <!--            android:drawableTop="@drawable/icon_hangup"-->
+        <!--            android:paddingTop="6px"-->
+        <!--            android:layout_alignParentLeft="true"-->
+        <!--            android:id="@+id/btnacceptcall"/>-->
+
+        <Button
+            android:id="@+id/btnCallhangup"
+            android:layout_width="44px"
+            android:layout_height="44px"
+            android:background="@drawable/circlebutton"
+            android:drawableTop="@drawable/icon_hangup"
+            android:paddingTop="6px" />
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

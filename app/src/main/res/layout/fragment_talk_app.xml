@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:padding="10px"
+    android:keepScreenOn="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="180px"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rounded_corner"
+        android:orientation="vertical"
+
+        app:layout_constraintTop_toBottomOf="@+id/lblWorkType"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <TextView
+            android:id="@+id/lblBottomLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:text="对讲机01"
+            android:textAlignment="center"
+            android:textColor="@color/fontcolor"
+            android:textSize="20px" />
+
+        <TextView
+            android:id="@+id/txtgroupname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="10px"
+            android:text="龙虎队成员突击队"
+            android:textAlignment="center"
+            android:textColor="@color/fontcolor"
+            android:textSize="24px" />
+
+
+        <TextView
+            android:id="@+id/txtdeviceid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="10px"
+            android:text="300290290"
+            android:textAlignment="center"
+            android:textColor="@color/fontcolor"
+            android:textSize="22px" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40px"
+        android:layout_height="40px"
+        android:layout_marginTop="-5px"
+        android:src="@drawable/talkui_icon_40x40"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="7dp"></ImageView>
+
+
+    <TextView
+        android:id="@+id/lblWorkType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10px"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="数字集群"
+        android:textColor="@color/titlefontcolor"
+        android:textDirection="firstStrong"
+        android:textIsSelectable="false"
+        android:textScaleX="1.1"
+        android:textSize="24sp"
+        android:layout_marginTop="10px"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44px"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="10px"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/CallBtnGroup"
+        tools:layout_editor_absoluteX="13dp">
+
+        <Button
+            android:id="@+id/btnvoicecall"
+            android:layout_height="44px"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/fontcolor"
+            android:background="@drawable/callbutton"
+            android:drawableLeft="@drawable/button_voicecall"
+            android:drawablePadding="5px"
+            android:gravity="left|center_vertical"
+            android:padding="12px"
+            android:text="语音呼叫"
+            android:textSize="14px"/>
+
+        <Button
+            android:id="@+id/btnvideocall"
+            android:layout_height="44px"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="5px"
+            android:layout_weight="1"
+            android:textColor="@color/fontcolor"
+            android:background="@drawable/callbutton"
+            android:drawableLeft="@drawable/button_videocall"
+            android:drawablePadding="5px"
+            android:gravity="left|center_vertical"
+            android:padding="12px"
+            android:text="视频呼叫"
+            android:textSize="14px"
+            />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

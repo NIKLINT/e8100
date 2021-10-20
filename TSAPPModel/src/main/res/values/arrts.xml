@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LEDDisplay">
+        <attr name="locationIcon" format="reference" />
+        <attr name="locationEnable" format="boolean" />
+        <attr name="haveMessage" format="boolean" />
+        <attr name="messageIcon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="SpectrumDisplay">
+        <attr name="foregroundColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="spectrumColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"></attr>
+    </declare-styleable>
+
+    <attr name="firstColor" format="color" />
+    <attr name="secondColor" format="color" />
+    <attr name="circleWidth" format="dimension" />
+    <attr name="dotCount" format="integer" />
+    <attr name="splitSize" format="integer" />
+    <attr name="bg" format="reference"></attr>
+
+    <declare-styleable name="CustomVolumControlBar">
+        <attr name="firstColor" />
+        <attr name="secondColor" />
+        <attr name="circleWidth" />
+        <attr name="dotCount" />
+        <attr name="splitSize" />
+        <attr name="bg" />
+    </declare-styleable>
+</resources>

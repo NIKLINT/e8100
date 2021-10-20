@@ -1,0 +1,3 @@
+include ':TSAPPModel'
+include ':app'
+rootProject.name = "e8100-talkapp"

@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">e8100talker</string>
+    <string name="title_activity_splash">e8100</string>
+    <string name="TS_WorkType_PDTTrunking">数字集群</string>
+    <string name="TS_WorkType_PDTNormal">数字常规</string>
+    <string name="TS_WorkType_MPTTrunking">模拟集群</string>
+    <string name="TS_WorkType_AnalogNormal">模拟常规</string>
+    <string name="TS_WorkType_POC">POC集群业务</string>
+    <string name="TS_WorkType_Single_POC">POC单呼业务</string>
+    <string name="TS_DM_CurrectChannelIndex">当前信道</string>
+    <string name="TS_DT_CurrectGroupIndex">当前组索引</string>
+
+    <string name="TS_POC_CurrectGroupIndex">组号</string>
+    <string name="TS_POC_CurrectUserID">用户ID</string>
+    <string name="TS_POC_CurrectUserName">用户名称</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_talkapp">MainActivity</string>
+
+    <string name="UI_VoiceCalling_Btn_Accept">接听呼叫</string>
+
+    <string name="CALLSTATUE_LABEL_IDLE">空闲</string>
+    <string name="CALLSTATUE_LABEL_CALLING">呼叫中</string>
+    <string name="CALLSTATUE_LABEL_RINGING">呼叫振铃中</string>
+    <string name="CALLSTATUE_LABEL_CALLWATING">呼叫排队中</string>
+    <string name="CALLSTATUE_LABEL_LOCALTX">本机讲话</string>
+    <string name="CALLSTATUE_LABEL_LOCALRX"></string>
+    <string name="CALLSTATUE_LABEL_CALLIDLE">呼叫空闲</string>
+    <string name="CALLSTATUE_LABEL_CALLEND">呼叫结束</string>
+    <string name="CALLSTATUE_LABEL_INVALIDGROUP">无效通话组</string>
+
+    <string name="DISC_UNKNOWN_OR_NOT_DEFIEND">未知原因</string>
+    <string name="DISC_CALL_END">呼叫结束</string>
+    <string name="DISC_CALLED_PARTY_BUSY">被叫忙</string>
+    <string name="DISC_CALLED_PARTY_NOT_SUPPORT_ENCRYP">被叫不支持加密</string>
+    <string name="DISC_CALLED_PARTY_REQ_ENCRYP">被叫要求加密</string>
+    <string name="DISC_CALLED_PARTY_REJECT_CALL">被叫拒绝接收</string>
+    <string name="DISC_CALLING_PARTY_CANCEL_CALL">呼叫取消</string>
+    <string name="DISC_CALLED_RINGING_TIME_OUT">末接来电</string>
+    <string name="DISC_CALLING_RINGING_TIME_OUT">被叫无法接通</string>
+    <string name="DISC_NO_ENCRY_DEVICE">无加密设备</string>
+    <string name="DISC_CURR_GROUP_NOT_ATTACHED">呼叫禁止</string>
+    <string name="DISC_CHANNEL_BUSY">呼叫排队</string>
+    <string name="DISC_INVALID_CALLED_ID">被叫地址无效</string>
+    <string name="DISC_UNKNOWN_CALLED_ID">未知号码</string>
+    <string name="DISC_CALLED_PARTY_NOT_REGISTER">被叫未登记</string>
+    <string name="DISC_CALLED_PARTY_NOT_REACHABLE">被叫不可达</string>
+    <string name="DISC_PREEMPTIVE_USE_OF_RESOURCE">呼叫被抢占</string>
+    <string name="DISC_SERVICE_NOT_AVAILABLE">系统服务不支持</string>
+    <string name="DISC_INVALID_CALL_ID">无效的呼叫ID</string>
+    <string name="DISC_SYSTEM_BUSY">系统繁忙</string>
+    <string name="DISC_MAX_CALL_TIME_REACHED">呼叫时长超时</string>
+    <string name="DISC_CALL_RESTORATION_FAILED">呼叫恢复失败</string>
+    <string name="DISC_CALL_REFUSE">系统拒绝</string>
+    <string name="DISC_SERVICE_NOT_AUTH">服务未被授权</string>
+    <string name="DISC_NETWORK_CONGESTION">网络忙</string>
+    <string name="DISC_NO_RESPONSE">被叫无法接通</string>
+    <string name="DISC_DEVICE_BUSY">设备忙</string>
+    <string name="DISC_NO_SIGNAL">无信号</string>
+    <string name="DISC_WRONG_INFO">错误呼叫</string>
+
+    <string name="TM_REGSTATUE_Scaning">扫描状态</string>
+    <string name="TM_REGSTATUE_Idle">待机状态</string>
+    <string name="TM_REGSTATUE_Actived">登记状态</string>
+    <string name="TM_REGSTATUE_LocalTX">主叫状态</string>
+    <string name="TM_REGSTATUE_LocalRX">被叫状态</string>
+    <string name="TM_REGSTATUE_MUTE">静默状态</string>
+    <string name="TM_REGSTATUE_LISTENING">监听状态</string>
+    <string name="TM_REGSTATUE_OFFLINE">脱网状态</string>
+
+    <string name="CALLTYPE_SINGLE">单呼者:</string>
+    <string name="CALLTYPE_GROUP">呼叫组:</string>
+    <string name="CALLTYPE_PSTNCALL">PSTN组呼</string>
+    <string name="CALLTYPE_BROADCAST">广播呼叫</string>
+    <string name="CALLTYPE_POCCALL">POC集群呼叫</string>
+    <string name="CALLTYPE_POCCALL_SINGLE">POC单体呼叫</string>
+</resources>
