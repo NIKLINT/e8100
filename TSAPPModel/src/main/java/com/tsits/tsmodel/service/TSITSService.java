@@ -442,19 +442,23 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyCallInSuc(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallInSuc: ");
-        RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
-                Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
-                new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
-        CallInfo.setCallType((short) pocSipMsg.getCallType());
-        CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
-        CreateCallTimer();
-        {
-            Intent _Param = new Intent();
-            _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
-            _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
-            _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
-            _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplication().startActivity(_Param);
+        if (pocSipMsg.getCallType() != 9) {
+            RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
+                    Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
+                    new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
+            CallInfo.setCallType((short) pocSipMsg.getCallType());
+            CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
+            CreateCallTimer();
+            {
+                Intent _Param = new Intent();
+                _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
+                _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
+                _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
+                _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplication().startActivity(_Param);
+            }
+        } else {
+            Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallInSuc ELSE: ");
         }
     }
 
@@ -480,20 +484,26 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyRecCallInEvent(PocSipMsg pocSipMsg) {//单呼被叫收到信息，组呼是直接建立对话
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyRecCallInEvent: ");
-//        ((TSITSApplication) getApplication()).getCoreService().getICoreServiceEvent().onRFAudio_SetMainInterfaceType(2);
-        RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_RINGING, (short) 0, (short) 1, (short) 0, (short) 1,
-                Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
-                new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
-        CallInfo.setCallType((short) pocSipMsg.getCallType());
-        CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
+        ((TSITSApplication) getApplication()).getCoreService().getICoreServiceEvent().onRFAudio_SetMainInterfaceType(2);//决定呼叫是宽带还是窄带
+        //onRFAudio_SetMainInterfaceType(2)默认宽带呼叫，被叫按PTT还是POC呼叫；onRFAudio_SetMainInterfaceType(1)默认窄带呼叫，POC组呼被叫按PTT呼PDT组呼。
+        if (pocSipMsg.getCallType() != 9) {
+            RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_RINGING, (short) 0, (short) 1, (short) 0, (short) 1,
+                    Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
+                    new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
+            CallInfo.setCallType((short) pocSipMsg.getCallType());
+            CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
 //        CreateCallTimer();
 
-        Intent _Param = new Intent();
-        _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
-        _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
-        _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
-        _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplication().startActivity(_Param);
+            Intent _Param = new Intent();
+            _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
+            _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
+            _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
+            _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplication().startActivity(_Param);
+        } else {
+            Log.d("TSITSService", "POC ---  onAVChatServiceNotifyRecCallInEvent ELSE: ");
+
+        }
     }
 
     @Override

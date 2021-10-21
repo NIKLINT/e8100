@@ -257,6 +257,7 @@ public class TalkAppFragment extends BackHandledFragment implements ITSCallInfoU
                 grpCallBtn.setVisibility(View.VISIBLE);
             }else {
                 grpCallBtn.setVisibility(View.INVISIBLE);
+                Log.d(this.getClass().getName(),"grpCallBtn.setVisibility(View.INVISIBLE)");
                 isPocMode=false;
                 switch (_tmpRuntimeInfo.getWorkType()) {
                     case 0: {

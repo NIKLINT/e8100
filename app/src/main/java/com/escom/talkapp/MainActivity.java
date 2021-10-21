@@ -60,7 +60,7 @@ import static java.nio.file.Paths.get;
 public class MainActivity extends AppCompatActivity implements BackHandledInterface, ServiceConnection {
     private static final String TAG = "MainActivity";
     private boolean hadIntercept;
-    private BackHandledFragment _CurrectFragment = null;
+    private BackHandledFragment _CurrectFragment;
     private boolean isOutGoing = true;
 
 
@@ -150,14 +150,16 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
 
     @Override
     public void setSelectedFragment(BackHandledFragment selectedFragment) {
-        Log.i(this.toString(), "setSelectedFragment");
+        Log.d(TAG, "selectedFragment is " + selectedFragment + "_CurrectFragment is " + _CurrectFragment);
         _CurrectFragment = selectedFragment;
-        Log.i(this.toString(), "_CurrectFragment: " + _CurrectFragment.getClass().toString());
+        Log.d(TAG, "selectedFragment2 is " + selectedFragment + "_CurrectFragment2 is " + _CurrectFragment);
+
     }
+
 
     @Override
     public void onBackPressed() {
-        if (_CurrectFragment != null && _CurrectFragment.onBackPressed()) {
+        if (_CurrectFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 super.onBackPressed();
             } else {
@@ -303,10 +305,13 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                         }
                         break;
                         case TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE: {  //收到宽带呼叫信息更新
+
                             RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
                             int getSrcIDSize = (new Long(_CallInfo.getSrcID())).toString().length();
                             int getDestIDSize = (new Long(_CallInfo.getDestID())).toString().length();
                             String getDestID = (new Long(_CallInfo.getDestID())).toString();
+                            int CallType = _CallInfo.getCallType();
+                            Log.d(TAG, "_CallInfo.getCallType()" + _CallInfo.getCallType());//被叫和主叫都同步，2 POC组呼  3 POC单呼  9 POC视频单呼
 
 
                             if ((getSrcIDSize == 6 && getDestIDSize == 7) || (getSrcIDSize == 7 && getDestIDSize == 6)) {//POC组呼
@@ -404,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                                     ServiceData.get().CallStatueInfo.setValue(_CallInfo);
                                 }
                             }
+
                         }
                         break;
                         case TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE: {
