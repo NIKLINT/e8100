@@ -397,37 +397,12 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyCallFail(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallFail: ");
-        RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CALLEND, (short) 1, (short) 1, (short) 0, (short) 1,
-                Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
-                new byte[1], new byte[1], new byte[1], CALLCAUSE_DISC_CALL_REFUSE, 0, 0, 0);
-        CallInfo.setCallType((short) pocSipMsg.getCallType());
-        ServiceData.get().CurrectPocSessionID.setValue(0);
-        CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
-        {
-            Intent _Param = new Intent();
-            _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
-            _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
-            _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
-            _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplication().startActivity(_Param);
-        }
-    }
-
-    @Override
-    public void onAVChatServiceNotifyCallHangupEvent(PocSipMsg pocSipMsg) {
-        Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallHangupEvent: ");
-        if (timer != null) {
-            ServiceData.get().SessionCalltime.postValue(0);
-            ServiceData.get().CurrectPocSessionID.setValue(0);
-            timer.cancel();
-            timer.purge();  //释放内存
             RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CALLEND, (short) 1, (short) 1, (short) 0, (short) 1,
                     Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
-                    new byte[1], new byte[1], new byte[1], CALLCAUSE_DISC_CALL_END, 0, 0, 0);
+                    new byte[1], new byte[1], new byte[1], CALLCAUSE_DISC_CALL_REFUSE, 0, 0, 0);
             CallInfo.setCallType((short) pocSipMsg.getCallType());
+            ServiceData.get().CurrectPocSessionID.setValue(0);
             CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
-
-            timer = null;
             {
                 Intent _Param = new Intent();
                 _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
@@ -436,7 +411,32 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                 _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplication().startActivity(_Param);
             }
-        }
+    }
+
+    @Override
+    public void onAVChatServiceNotifyCallHangupEvent(PocSipMsg pocSipMsg) {
+        Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallHangupEvent: ");
+            if (timer != null) {
+                ServiceData.get().SessionCalltime.postValue(0);
+                ServiceData.get().CurrectPocSessionID.setValue(0);
+                timer.cancel();
+                timer.purge();  //释放内存
+                RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CALLEND, (short) 1, (short) 1, (short) 0, (short) 1,
+                        Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
+                        new byte[1], new byte[1], new byte[1], CALLCAUSE_DISC_CALL_END, 0, 0, 0);
+                CallInfo.setCallType((short) pocSipMsg.getCallType());
+                CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
+
+                timer = null;
+
+                Intent _Param = new Intent();
+                _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
+                _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
+                _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
+                _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplication().startActivity(_Param);
+
+            }
     }
 
     @Override
@@ -465,19 +465,23 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyCallOutSuc(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallOutSuc: ");
-        RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
-                Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
-                new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
-        CallInfo.setCallType((short) pocSipMsg.getCallType());
-        CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
-        CreateCallTimer();
-        {
+        if (pocSipMsg.getCallType() != 9) {
+            RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
+                    Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
+                    new byte[1], new byte[1], new byte[1], 0, 0, 0, 0);
+            CallInfo.setCallType((short) pocSipMsg.getCallType());
+            CallInfo.setCallMode(CallModeEnum.TS_CLLMODE_POC);
+            CreateCallTimer();
+
             Intent _Param = new Intent();
             _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
             _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE);
             _Param.putExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA, CallInfo);
             _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplication().startActivity(_Param);
+        } else {
+            Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallOutSuc ELSE: ");
+
         }
     }
 

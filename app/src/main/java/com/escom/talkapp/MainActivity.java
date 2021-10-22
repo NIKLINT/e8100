@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                                     Log.d(TAG, "_CallMode is 3");
                                     //POC Video
                                     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_SetVideoCall(_Callto, true);
+
                                 }
                                 break;
 
