@@ -150,6 +150,7 @@ public class TalkAppFragment extends BackHandledFragment implements ITSCallInfoU
             txtgroupname.setText(String.valueOf(GroupID));
         }
         lblBottomLabel.setText(getResources().getString(R.string.TS_DM_CurrectChannelIndex)+":"+String.valueOf(GroupIndex));
+        Log.d("TalkAppFragment","TalkAppFragment");
     }
 
     @Override
@@ -187,23 +188,23 @@ public class TalkAppFragment extends BackHandledFragment implements ITSCallInfoU
                // mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOff();
             }
         });
-        btnvideocall    =   fragmentView.findViewById(R.id.btnvideocall);
-        btnvideocall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isPocMode) {
-                    mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOn(0,false);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    int PocSessionID = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_SetVoiceFullCall(_tmpRuntimeInfo.getPocGroupId(),false);
-                    ServiceData.get().CurrectPocSessionID.setValue(PocSessionID);
-                }
-            }
-        });
+//        btnvideocall    =   fragmentView.findViewById(R.id.btnvideocall);
+//        btnvideocall.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!isPocMode) {
+//                    mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOn(0,false);
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }else {
+//                    int PocSessionID = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_SetVoiceFullCall(_tmpRuntimeInfo.getPocGroupId(),false);
+//                    ServiceData.get().CurrectPocSessionID.setValue(PocSessionID);
+//                }
+//            }
+//        });
         if(_tmpRuntimeInfo!=null)
         {
 
@@ -264,6 +265,7 @@ public class TalkAppFragment extends BackHandledFragment implements ITSCallInfoU
                         //PDT　集群
                         lblWorkType.setText(R.string.TS_WorkType_PDTTrunking);
                         ShowTMScreenInfo(_tmpRuntimeInfo.getCurrectGroupID(), (int) _tmpRuntimeInfo.getCurrectGroupID(), (byte) _tmpRuntimeInfo.getRegState(), (byte) 0);
+                        Log.d("TalkAppFragment","TalkAppFragment1");
                     }
                     break;
                     case 2: {
@@ -271,6 +273,7 @@ public class TalkAppFragment extends BackHandledFragment implements ITSCallInfoU
                         lblWorkType.setText(R.string.TS_WorkType_PDTNormal);
                         lblBottomLabel.setText(getResources().getString(R.string.TS_DM_CurrectChannelIndex) + ":" + String.valueOf(_tmpRuntimeInfo.getChannelIndex()));
                         txtgroupname.setText(String.valueOf(_tmpRuntimeInfo.getCallID()));
+                        Log.d("TalkAppFragment","TalkAppFragment2");
                     }
                     break;
                     case 3: {

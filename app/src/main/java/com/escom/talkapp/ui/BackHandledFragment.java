@@ -46,7 +46,6 @@ public abstract class BackHandledFragment extends Fragment {
             if(mTSApplication.getCoreService()!=null){
                 if (mTSApplication.getCoreService().isConnected()) {
                     _tmpRuntimeInfo = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus();
-
                     return true;
                 } else {
                     Log.d(this.getClass().getName(), "InitialRunningStatue: Service not Connected");

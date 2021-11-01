@@ -13,9 +13,7 @@
         <action
             android:id="@+id/action_navigation_talk_to_navigation_calling"
             app:destination="@id/navigation_calling" />
-        <action
-            android:id="@+id/action_navigation_talk_to_navigation_video"
-            app:destination="@id/navigation_video" />
+
     </fragment>
 
     <fragment
@@ -35,7 +33,12 @@
         tools:layout="@layout/fragment_voice_calling" />
 
     <fragment
-        android:id="@+id/navigation_video"
-        android:name="com.escom.talkapp.ui.VideoCallingFragment"
-        tools:layout="@layout/fragment_video_calling" />
+        android:id="@+id/navigation_calling_waiting"
+        android:name="com.escom.talkapp.ui.VoiceCallingFragmentWaiting"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_voice_calling_waiting" >
+
+    </fragment>
+
+
 </navigation>

@@ -103,27 +103,26 @@
             android:textColor="@color/fontcolor"
             android:background="@drawable/callbutton"
             android:drawableLeft="@drawable/button_voicecall"
-            android:drawablePadding="5px"
             android:gravity="left|center_vertical"
-            android:padding="12px"
+            android:paddingLeft="70px"
             android:text="语音呼叫"
             android:textSize="14px"/>
 
-        <Button
-            android:id="@+id/btnvideocall"
-            android:layout_height="44px"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="5px"
-            android:layout_weight="1"
-            android:textColor="@color/fontcolor"
-            android:background="@drawable/callbutton"
-            android:drawableLeft="@drawable/button_videocall"
-            android:drawablePadding="5px"
-            android:gravity="left|center_vertical"
-            android:padding="12px"
-            android:text="视频呼叫"
-            android:textSize="14px"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/btnvideocall"-->
+<!--            android:layout_height="44px"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_marginLeft="5px"-->
+<!--            android:layout_weight="1"-->
+<!--            android:textColor="@color/fontcolor"-->
+<!--            android:background="@drawable/callbutton"-->
+<!--            android:drawableLeft="@drawable/button_videocall"-->
+<!--            android:drawablePadding="5px"-->
+<!--            android:gravity="left|center_vertical"-->
+<!--            android:padding="12px"-->
+<!--            android:text="视频呼叫"-->
+<!--            android:textSize="14px"-->
+<!--            />-->
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -252,35 +253,24 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
 
     @Override
     public void onRFModel_CallStatusUpdate(RF_CallStatusUpdate rf_callStatusUpdate) {
-        Log.d("TSITSService", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType() + ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
+        Log.d("TSITSService", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType()
+                + ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
         // Log.d("TSITSService", "onRFModel_CallStatusUpdate: type--"+rf_callStatusUpdate.toString());
-        mHandler.post(() -> {
-            ServiceData.get().CallStatueInfo.setValue(rf_callStatusUpdate);
 
-            // if(isDown.getCallStatus() ==TS_CALLSTATUE_LOCALTXBEGIN)
-            switch (rf_callStatusUpdate.getCallStatus()) {
-                case CALLSTATUE_CRATESESSION: {
-                    Log.d("CALLSTATUE_CRATESESSION", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType() +
-                            ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
-                    CreateCallTimer();
-                    {
-                        Intent _Param = new Intent();
-                        _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
-                        _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE);
-                        _Param.putExtra(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA, rf_callStatusUpdate);
-                        _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplication().startActivity(_Param);
-                    }
-                }
-                break;
-                case CALLSTATUE_DESTROYSESSION: {
-                    Log.d("CALLSTATUE_DESTROYSESSION", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType() +
-                            ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
-                    if (timer != null) {
-                        ServiceData.get().SessionCalltime.postValue(0);
-                        timer.cancel();
-                        timer.purge();  //释放内存
-                        timer = null;
+        TSRunTimeStatusInfo _runtimeinfo = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus();
+        Log.d("TSITSService", "_runtimeinfo.getWorkType" + _runtimeinfo.getWorkType());
+
+        if (_runtimeinfo.getWorkType() == 3 || _runtimeinfo.getWorkType() == 4) {
+        } else {
+            mHandler.post(() -> {
+                ServiceData.get().CallStatueInfo.setValue(rf_callStatusUpdate);
+
+                // if(isDown.getCallStatus() ==TS_CALLSTATUE_LOCALTXBEGIN)
+                switch (rf_callStatusUpdate.getCallStatus()) {
+                    case CALLSTATUE_CRATESESSION: {
+                        Log.d("CALLSTATUE_CRATESESSION", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType() +
+                                ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
+                        CreateCallTimer();
                         {
                             Intent _Param = new Intent();
                             _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
@@ -290,8 +280,26 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                             getApplication().startActivity(_Param);
                         }
                     }
-                }
-                break;
+                    break;
+                    case CALLSTATUE_DESTROYSESSION: {
+                        Log.d("CALLSTATUE_DESTROYSESSION", "onRFModel_CallStatusUpdate: type--" + rf_callStatusUpdate.getCallType() +
+                                ",statue--" + rf_callStatusUpdate.getCallStatus() + ",cause--" + rf_callStatusUpdate.getCallCause());
+                        if (timer != null) {
+                            ServiceData.get().SessionCalltime.postValue(0);
+                            timer.cancel();
+                            timer.purge();  //释放内存
+                            timer = null;
+                            {
+                                Intent _Param = new Intent();
+                                _Param.setComponent(new ComponentName(CallAcitivty_PackageName, CallAcitivty_ClassName));
+                                _Param.putExtra(TS_CORESERVICE_EVENT, TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE);
+                                _Param.putExtra(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA, rf_callStatusUpdate);
+                                _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getApplication().startActivity(_Param);
+                            }
+                        }
+                    }
+                    break;
 //            default:{
 //              //  CreateCallTimer();
 //                {
@@ -303,8 +311,9 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
 //                    getApplication().startActivity(_Param);
 //                }
 //            }
-            }
-        });
+                }
+            });
+        }
 
     }
 
@@ -338,6 +347,9 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                 //if not in call session ,then send a poc call request
                 TSRunTimeStatusInfo _runtimeinfo = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus();
                 int PocSessionID = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_SetVoiceFullCall(_runtimeinfo.getPocGroupId(), false);
+                Log.d("TSITSService isDown", "PocSessionID "+PocSessionID );
+                Log.d("TSITSService isDown", "_runtimeinfo.getPocGroupId() "+_runtimeinfo.getPocGroupId() );
+
                 //request call success ,then send ptton
                 try {
                     Thread.sleep(100);
@@ -345,17 +357,19 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                     e.printStackTrace();
                 }
                 if (PocSessionID > 0) {
+                    Log.d("TSITSService isDown", "PocSessionID > 0 " +PocSessionID);
                     ServiceData.get().CurrectPocSessionID.setValue(PocSessionID);
                     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOn(ServiceData.get().CurrectPocSessionID.getValue(), false);
                 }
             } else {
+                Log.d("TSITSService isDown", "ServiceData.get().CurrectPocSessionID.getValue() ELSE"+ServiceData.get().CurrectPocSessionID.getValue() );
                 if (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CLLMODE_POC) {
                     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOn(ServiceData.get().CurrectPocSessionID.getValue(), false);
                 }
             }
         } else {
-            if ((ServiceData.get().CurrectPocSessionID.getValue() > 0) && (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CLLMODE_POC)) {
-                Log.d("TSITSService", "process onRFPttCallback: " + isDown);
+            if ((ServiceData.get().CurrectPocSessionID.getValue() >0) && (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CLLMODE_POC)) {
+                Log.d("TSITSService isDown", "process onRFPttCallback: " + isDown);
                 mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_PTTOff(ServiceData.get().CurrectPocSessionID.getValue());
             }
         }
@@ -391,12 +405,18 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceConsultVideoInfo(PocResolution result) {
         Log.d("TSITSService", "POC ---  onAVChatServiceConsultVideoInfo: ");
+        //对讲App实现POC视频呼叫，通讯录联系人视频按钮隐式Intent启动公网对讲App
     }
 
 
     @Override
     public void onAVChatServiceNotifyCallFail(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallFail: ");
+        Log.d("TSITSService", "pocSipMsg.getCallType() CallFail: " + pocSipMsg.getCallType());
+
+        if (pocSipMsg.getCallType()==9){
+
+        }else {
             RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CALLEND, (short) 1, (short) 1, (short) 0, (short) 1,
                     Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
                     new byte[1], new byte[1], new byte[1], CALLCAUSE_DISC_CALL_REFUSE, 0, 0, 0);
@@ -411,11 +431,14 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                 _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplication().startActivity(_Param);
             }
+        }
     }
 
     @Override
     public void onAVChatServiceNotifyCallHangupEvent(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallHangupEvent: ");
+        Log.d("TSITSService", "pocSipMsg.getCallType() CallHangupEvent: " + pocSipMsg.getCallType());
+
             if (timer != null) {
                 ServiceData.get().SessionCalltime.postValue(0);
                 ServiceData.get().CurrectPocSessionID.setValue(0);
@@ -436,12 +459,13 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
                 _Param.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplication().startActivity(_Param);
 
-            }
+        }
     }
 
     @Override
     public void onAVChatServiceNotifyCallInSuc(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallInSuc: ");
+        Log.d("TSITSService", "pocSipMsg.getCallType() CallInSuc: " + pocSipMsg.getCallType());
         if (pocSipMsg.getCallType() != 9) {
             RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
                     Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
@@ -465,6 +489,7 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyCallOutSuc(PocSipMsg pocSipMsg) {
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyCallOutSuc: ");
+        Log.d("TSITSService", "pocSipMsg.getCallType() CallOutSuc: " + pocSipMsg.getCallType());
         if (pocSipMsg.getCallType() != 9) {
             RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_CRATESESSION, (short) 1, (short) 1, (short) 0, (short) 1,
                     Long.parseLong(pocSipMsg.getCallTel()), Long.parseLong(pocSipMsg.getCalledTel()), Long.parseLong(pocSipMsg.getCallTel()),
@@ -488,7 +513,8 @@ public class TSITSService extends Service implements IRFModelEvent, IPocCallBack
     @Override
     public void onAVChatServiceNotifyRecCallInEvent(PocSipMsg pocSipMsg) {//单呼被叫收到信息，组呼是直接建立对话
         Log.d("TSITSService", "POC ---  onAVChatServiceNotifyRecCallInEvent: ");
-        ((TSITSApplication) getApplication()).getCoreService().getICoreServiceEvent().onRFAudio_SetMainInterfaceType(2);//决定呼叫是宽带还是窄带
+        Log.d("TSITSService", "pocSipMsg.getCallType() CallInEvent: " + pocSipMsg.getCallType());
+        ((TSITSApplication) getApplication()).getCoreService().getICoreServiceEvent().onRFAudio_SetMainInterfaceType(2);//决定默认呼叫是宽带还是窄带
         //onRFAudio_SetMainInterfaceType(2)默认宽带呼叫，被叫按PTT还是POC呼叫；onRFAudio_SetMainInterfaceType(1)默认窄带呼叫，POC组呼被叫按PTT呼PDT组呼。
         if (pocSipMsg.getCallType() != 9) {
             RF_CallStatusUpdate CallInfo = new RF_CallStatusUpdate((short) CALLSTATUE_RINGING, (short) 0, (short) 1, (short) 0, (short) 1,

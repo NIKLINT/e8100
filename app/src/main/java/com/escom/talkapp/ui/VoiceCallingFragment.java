@@ -347,8 +347,29 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
             break;
             case CallStatusDefine.CALLSTATUE_CALLING:
             case CALLSTATUE_CRATESESSION: {
-                _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
-                ShowCallType(_CallInfo);
+                String getPocDeviceId = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId();
+
+                String getDestID = (new Long(_CallInfo.getDestID())).toString();
+                String getSrcID = (new Long(_CallInfo.getSrcID())).toString();
+                Log.d(TAG,"getDestID.hashCode()"+getDestID.hashCode());
+                Log.d(TAG, "_CallInfo.getDestID=" + getDestID + "_CallInfo.getPocDeviceId=" + getPocDeviceId + "_CallInfo.getSrcID=" + getSrcID);
+                if (_CallInfo.getCallType() != 3) {
+                    if (getPocDeviceId.equals(getDestID)) {//被呼
+                        Log.d(TAG, "_CallInfo.getDestID=" + getDestID);
+                        _txtCallerID.setText(getSrcID);
+                        ShowCallType(_CallInfo);
+                    } else if (getPocDeviceId.equals(getSrcID)) {//主呼
+                        Log.d(TAG, "_CallInfo.getSrcID=" + getSrcID);
+                        _txtCallerID.setText(getDestID);
+                        ShowCallType(_CallInfo);
+                    } else {
+                        _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
+                        ShowCallType(_CallInfo);
+                    }
+                }else{
+                    _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
+                    ShowCallType(_CallInfo);
+                }
             }
             break;
             case CallStatusDefine.CALLSTATUE_RINGING: {

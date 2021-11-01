@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/acivityContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:keepScreenOn="true"
+    android:padding="10px">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_wait"
+            android:layout_width="match_parent"
+            android:layout_height="160px"
+            android:layout_centerInParent="true"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10px"
+            app:layout_constraintTop_toBottomOf="@+id/lblCallType_wait"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp">
+
+                <ImageView
+                    android:id="@+id/imgCallType_wait"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
+                    android:layout_marginBottom="5px"
+                    android:background="@drawable/ic_rxlogo"></ImageView>
+
+                <TextView
+                    android:id="@+id/lblGroupID_wait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5px"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:text="POC单体呼叫"
+                    android:textColor="@color/fontcolor"
+                    android:textSize="20px"></TextView>
+
+                <TextView
+                    android:id="@+id/lblCallTimer_wait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5px"
+                    android:text=""
+                    android:textColor="@color/fontcolor"
+                    android:textSize="20px">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/lblCallFrom_wait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="呼叫振铃中"
+                    android:textColor="@color/fontcolor"
+                    android:textSize="17px"></TextView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView_wait"
+            android:layout_width="40px"
+            android:layout_height="40px"
+            android:layout_marginTop="-5px"
+            android:src="@drawable/talkui_icon_40x40"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="7dp"></ImageView>
+
+        <TextView
+            android:id="@+id/lblCallType_wait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="POC单呼业务"
+            android:textColor="@color/titlefontcolor"
+            android:textDirection="firstStrong"
+            android:textIsSelectable="false"
+            android:textScaleX="1.1"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/imageView_wait"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <jaygoo.widget.wlv.WaveLineView
+            android:id="@+id/audioRecordView_wait"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout_wait"
+            app:wlvBackgroundColor="@color/colorPrimary"
+            app:wlvFineLineWidth="1dp"
+            app:wlvMoveSpeed="290"
+            app:wlvSamplingSize="48"
+            app:wlvSensibility="10"
+            app:wlvThickLineWidth="3dp"
+            tools:layout_editor_absoluteX="13dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/audioRecordView_wait">
+
+
+
+
+        <!--        <Button-->
+        <!--            android:layout_width="44px"-->
+        <!--            android:layout_height="44px"-->
+        <!--            android:visibility="invisible"-->
+        <!--            android:background="@drawable/circlebutton_green"-->
+        <!--            android:drawableTop="@drawable/icon_hangup"-->
+        <!--            android:paddingTop="6px"-->
+        <!--            android:layout_alignParentLeft="true"-->
+        <!--            android:id="@+id/btnacceptcall"/>-->
+
+        <Button
+            android:id="@+id/btnCallhangup_wait"
+            android:layout_width="44px"
+            android:layout_height="44px"
+            android:background="@drawable/circlebutton"
+            android:drawableTop="@drawable/icon_hangup"
+            android:paddingTop="6px" />
+        </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

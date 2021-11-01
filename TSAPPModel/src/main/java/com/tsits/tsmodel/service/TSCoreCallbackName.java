@@ -8,7 +8,6 @@ public class TSCoreCallbackName {
     public static final String TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE ="onRFModel_CallStatusUpdate";
     public static final String TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA ="CallStatusUpdate";
     public static final String TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE ="onPOCModel_CallStatusUpdate";
-    public static final String TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_CALLIN ="onPOCCallInModel_CallStatusUpdate";
 
 
     public static final String TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA ="POCCallStatusUpdate";
