@@ -163,7 +163,6 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
 
     private void RegistViewEvent() {
         //region Hangup Button Event
-//        RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) getActivity().getIntent().getSerializableExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
         RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) getArguments().getSerializable(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
         _PocCallInfo = (PocSipMsg) getArguments().getSerializable(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA);
 

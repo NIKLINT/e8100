@@ -20,6 +20,7 @@ import com.tsits.tsmodel.TSITSApplication;
 import com.tsits.tsmodel.service.ServiceData;
 
 import static com.tsits.tsmodel.service.TSCoreCallbackName.TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA;
+import static com.tsits.tsmodel.service.TSCoreCallbackName.TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +34,9 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
     private Button _btnCallhangup_wait;
     private TextView _lblCallTimer_wait;
     private View _ContentView;
+
+    private PocSipMsg _PocCallInfo;
+
     // TODO: Rename and change types of parameters
 
 
@@ -71,6 +75,8 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
             });
         }
 
+        _lblCallTimer_wait.setText("本机"+mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId());
+
     }
 
     @Override
@@ -79,9 +85,8 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
         _ContentView = inflater.inflate(R.layout.fragment_voice_calling_waiting, container, false);
         _btnCallhangup_wait = _ContentView.findViewById(R.id.btnCallhangup_wait);
         _lblCallTimer_wait = _ContentView.findViewById(R.id.lblCallTimer_wait);
-        ICoreClientCallback clientSDK = mTSApplication.getCoreService().getICoreServiceEvent();
-        int getPocDeviceId= Integer.parseInt(clientSDK.onAppModel_GetRunningStatus().getPocDeviceId());
-        _lblCallTimer_wait.setText("本机"+mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId());
+
+
         RegistViewEvent();
         return _ContentView;
     }

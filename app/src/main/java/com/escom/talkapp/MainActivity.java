@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
         super.onNewIntent(intent);
         setIntent(intent);
         int _CallMode = intent.getIntExtra("CallMode", 1);
-        RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
         String CallEvent = intent.getStringExtra(TS_CORESERVICE_EVENT);
 
 //        if( ((TSITSApplication) getApplication()).getCoreService().getICoreServiceEvent()==null)
@@ -237,7 +236,9 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                                 case 2: {
                                     //POC呼叫
                                     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_SetVoiceFullCall(_Callto, true);
-                                    navController.navigate(R.id.navigation_calling_waiting);
+                                    if (_CallMode==2) {//POC单呼
+                                        navController.navigate(R.id.navigation_calling_waiting);
+                                }
                                 }
                                 break;
                                 case 3: {
@@ -288,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                         }
                         break;
                         case TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE: {  //收到宽带呼叫信息更新
+                            RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
                             int getSrcIDSize = (new Long(_CallInfo.getSrcID())).toString().length();
                             int getDestIDSize = (new Long(_CallInfo.getDestID())).toString().length();
                             String getDestID = (new Long(_CallInfo.getDestID())).toString();
@@ -295,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                             Log.d(TAG, "_CallInfo.getCallType()" + _CallInfo.getCallType());//被叫和主叫都同步，2 POC组呼  3 POC单呼  9 POC视频单呼
 
 
-                            if ((getSrcIDSize == 6 && getDestIDSize == 7) || (getSrcIDSize == 7 && getDestIDSize == 6)) {//POC组呼
+                            if (_CallInfo.getCallType()==2) {//POC组呼
                                 if (_CurrectFragment != null) {
                                     if (!_CurrectFragment.getClass().equals(VoiceCallingFragment.class)) {
                                         Bundle bundlePara = new Bundle();
@@ -318,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                                 }
                                 ServiceData.get().CallStatueInfo.setValue(_CallInfo);
 
-                            } else if (getSrcIDSize == 7 && getDestIDSize == 7) {//POC单呼
+                            } else if (_CallInfo.getCallType()==3) {//POC单呼
                                 /*
                                  * 当单呼的时候唤醒屏幕
                                  * */
@@ -394,16 +396,14 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                         }
                         break;
                         case TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE: {
+                            RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
                             //收到窄带呼叫信息更新
-                            Log.d(this.getClass().getName(), "onNewIntent: " + _CallInfo.getWorkType());
                             if (_CurrectFragment != null) {
                                 if (!_CurrectFragment.getClass().equals(VoiceCallingFragment.class)) {
                                     Bundle bundlePara = new Bundle();
                                     bundlePara.putString(TS_CORESERVICE_EVENT, CallEvent);
-                                    Log.i(this.toString(), "onNewIntent _CallInfo Status:" + _CallInfo.getCallStatus());
                                     bundlePara.putSerializable(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA, _CallInfo);
                                     navController.navigate(R.id.navigation_calling, bundlePara);
-                                    Log.d(TAG, "TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE");
                                 } else {
                                     //   RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA);
 
@@ -413,10 +413,8 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
                                 Bundle bundlePara = new Bundle();
                                 bundlePara.putString(TS_CORESERVICE_EVENT, CallEvent);
                                 //   RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) intent.getSerializableExtra(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA);
-                                Log.i(this.toString(), "onNewIntent _CallInfo Status:" + _CallInfo.getCallStatus());
                                 bundlePara.putSerializable(TS_CORESERVICE_EVENT_ONCALLSTATUSUPDATE_PARA, _CallInfo);
                                 navController.navigate(R.id.navigation_calling, bundlePara);
-                                Log.d(TAG, "TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE else");
                             }
                         }
                         break;

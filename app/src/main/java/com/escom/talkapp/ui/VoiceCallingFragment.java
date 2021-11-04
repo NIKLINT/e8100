@@ -81,7 +81,7 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
     private Button _btnCallhangup;
     private Button _btnacceptcall;
     private IntentFilter _KeyFilter;
-    private String TAG = this.getClass().getName();
+    private String TAG = "VoiceCallingFragment";
 
 
     public VoiceCallingFragment() {
@@ -178,10 +178,8 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
 
         if (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CLLMODE_POC) {
             RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) getArguments().getSerializable(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
-            int getSrcIDSize = (new Long(_CallInfo.getSrcID())).toString().length();
-            int getDestIDSize = (new Long(_CallInfo.getDestID())).toString().length();
             if (_CallInfo != null) {
-                if ((getSrcIDSize == 6 && getDestIDSize == 7) || (getSrcIDSize == 7 && getDestIDSize == 6)) {//POC组呼
+                if (_CallInfo.getCallType()==2) {//POC组呼
                     ServiceData.get().SessionCalltime.observe(getViewLifecycleOwner(), integer -> {
                         String min = String.format("%02d", integer / 60);
                         String sec = String.format("%02d", integer % 60);
@@ -325,7 +323,7 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
             }
         } else if (_CallInfo.getCallMode() == CallModeEnum.TS_CLLMODE_POC) {
             if (_CallInfo.getCallType() == 2) {
-                _txtCallID.setText(R.string.CALLTYPE_POCCALL);
+                _txtCallID.setText("呼叫组:"+mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocGroupId());
             } else {
                 _txtCallID.setText(R.string.CALLTYPE_POCCALL_SINGLE);
             }
@@ -356,11 +354,11 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
                 if (_CallInfo.getCallType() != 3) {
                     if (getPocDeviceId.equals(getDestID)) {//被呼
                         Log.d(TAG, "_CallInfo.getDestID=" + getDestID);
-                        _txtCallerID.setText(getSrcID);
+                        _txtCallerID.setText(""+getPocDeviceId);
                         ShowCallType(_CallInfo);
                     } else if (getPocDeviceId.equals(getSrcID)) {//主呼
                         Log.d(TAG, "_CallInfo.getSrcID=" + getSrcID);
-                        _txtCallerID.setText(getDestID);
+                        _txtCallerID.setText(""+getPocDeviceId);
                         ShowCallType(_CallInfo);
                     } else {
                         _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
