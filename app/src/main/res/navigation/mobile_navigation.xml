@@ -10,9 +10,9 @@
         android:name="com.escom.talkapp.ui.TalkAppFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_talk_app">
-        <action
-            android:id="@+id/action_navigation_talk_to_navigation_calling"
-            app:destination="@id/navigation_calling" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_talk_to_navigation_calling"-->
+<!--            app:destination="@id/navigation_calling" />-->
 
     </fragment>
 
@@ -21,9 +21,9 @@
         android:name="com.escom.talkapp.ui.VoiceCallingFragmentAccept"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_voice_calling_accept">
-        <action
-            android:id="@+id/action_navigation_accept_to_navigation_calling"
-            app:destination="@id/navigation_calling" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_accept_to_navigation_calling"-->
+<!--            app:destination="@id/navigation_calling" />-->
     </fragment>
 
     <fragment

@@ -90,7 +90,6 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
     private String TAG = this.getClass().getName();
 
 
-
     // private CallModeEnum _CurrectCallMode =CallModeEnum.TS_CALLMODE_RF;
     public VoiceCallingFragmentAccept() {
         super();
@@ -104,7 +103,6 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(this.getClass().getName(), "KeyEventReceiver message:" + intent.getAction().toString());
-            //     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(0);
         }
     };
 
@@ -154,7 +152,7 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
             switch (message.what) {
                 case 1:
                     _lblCallTimer_accept.setText(_PocCallInfo.getCallTel().toString());
-                    Log.d(TAG,"getCallTel: "+_PocCallInfo.getCallTel().toString());
+                    Log.d(TAG, "getCallTel: " + _PocCallInfo.getCallTel().toString());
                     break;
             }
         }
@@ -184,26 +182,23 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
             _btnCallhangup_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG,"------------------------_btnCallhangup_accept is click!!");
                     if (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CALLMODE_RF) {
-                        Log.d(TAG,"-----------1-------------_btnCallhangup_accept is click!!");
+                        Log.d(TAG, "-----------1-------------_btnCallhangup_accept is click!!");
                         mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(-1);
                     } else {
-                        Log.d(TAG,"----------2--------------_btnCallhangup_accept is click!!");
                         if (_CallInfo != null) {
-                            Log.d(TAG,"----------_CallInfo--------------_btnCallhangup_accept is click!!");
                             ICoreClientCallback clientSDK = mTSApplication.getCoreService().getICoreServiceEvent();
-                            int getPocDeviceId= Integer.parseInt(clientSDK.onAppModel_GetRunningStatus().getPocDeviceId());
-                            int getDestID= (int) _CallInfo.getDestID();
-                            if (getPocDeviceId==getDestID) {
-                                Log.d(TAG,"------------3------------_btnCallhangup_accept is click!!");
+                            int getPocDeviceId = Integer.parseInt(clientSDK.onAppModel_GetRunningStatus().getPocDeviceId());
+                            int getDestID = (int) _CallInfo.getDestID();
+                            if (getPocDeviceId == getDestID) {
+                                Log.d(TAG, "------------3------------_btnCallhangup_accept is click!!");
                                 Log.d(TAG, clientSDK.onAppModel_GetRunningStatus().getPocDeviceId()
-                                                + ""+_CallInfo.getDestID());
+                                        + "" + _CallInfo.getDestID());
                                 mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(1);
-                            }else {
-                                Log.d(TAG,"-----------4-------------_btnCallhangup_accept is click!!");
+                            } else {
+                                Log.d(TAG, "-----------4-------------_btnCallhangup_accept is click!!");
                                 Log.d(TAG, clientSDK.onAppModel_GetRunningStatus().getPocDeviceId()
-                                                + ""+_CallInfo.getDestID());
+                                        + "" + _CallInfo.getDestID());
                                 mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(1);
                             }
                         }
@@ -236,7 +231,7 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
 //            String min = String.format("%02d", integer / 60);
 //            String sec = String.format("%02d", integer % 60);
 //            _lblCallTimer_accept.setText(min + ":" + sec);
-            _lblCallTimer_accept.setText(""+_CallInfo.getSrcID());
+            _lblCallTimer_accept.setText("" + _CallInfo.getSrcID());
         });
 
     }
@@ -258,7 +253,6 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
         _btnCallhangup_accept = _ContentView_accept.findViewById(R.id.btnCallhangup_accept);
         _btnacceptcall_accept = _ContentView_accept.findViewById(R.id.btnCallaccept_accept);
         mRecordingView_accept = _ContentView_accept.findViewById(R.id.audioRecordView_accept);
-
 
 
         {
@@ -324,8 +318,6 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
 
         }
         RegistViewEvent();
-
-
 
 
 //        final long timeTnterval = 10000;
@@ -584,25 +576,24 @@ public class VoiceCallingFragmentAccept extends BackHandledFragment implements I
 //        int _CallMode = getActivity().getIntent().getIntExtra("CallMode", 2); //呼叫模式，1---窄带集群     2--宽带  3---宽带视频（暂不用）
 //        boolean emergencyCall=getActivity().getIntent().getBooleanExtra("emergencyCall",false);
 
-        if (_CallInfo.getCallPriority() == 4) {
-            _acivityContent_accept.setBackgroundResource(R.drawable.rounded_corner_emergency);
-            //   mRecordingView.setBackgroundResource(R.color.emergency);
-        } else {
-            if (_CallInfo.getCallMode() == CallModeEnum.TS_CALLMODE_RF) {
-                //receive RF CallInfo Update
-                if (_CallInfo.getEncrptFlag() == 0) { // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
-                    _acivityContent_accept.setBackgroundResource(R.drawable.rounded_corner);
-                    // mRecordingView.setBackgroundResource(R.color.backgroundColor);
-                } else if (_CallInfo.getEncrptFlag() == 1) {
+        if (_CallInfo.getCallMode() == CallModeEnum.TS_CALLMODE_RF) {  //窄带呼叫
+            if (_CallInfo.getCallPriority() == 4) {  //紧急呼叫
+                if (_CallInfo.getEncrptFlag() == 1) {  // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
                     _acivityContent_accept.setBackgroundResource(R.drawable.rounded_orange);
+                } else {
+                    _acivityContent_accept.setBackgroundResource(R.drawable.rounded_corner_emergency);
                 }
-            } else {
-                //Receive POC CallInfo Update
-                if (_CallInfo.getCallType() == 1) {
+            } else {  //非紧急呼叫
+                if (_CallInfo.getEncrptFlag() == 1) {  // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
+                    _acivityContent_accept.setBackgroundResource(R.drawable.rounded_orange);
+                } else {
                     _acivityContent_accept.setBackgroundResource(R.drawable.rounded_corner);
-                    //single call
                 }
             }
+        } else {
+            int getCallType = Integer.parseInt(String.valueOf(mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPriority()));
+            _acivityContent_accept.setBackgroundResource(R.drawable.rounded_corner);
+
         }
 
 

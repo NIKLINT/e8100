@@ -1,5 +1,6 @@
 package com.escom.talkapp.ui;
 
+import android.content.Intent;
 import android.media.tv.TvContentRating;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,13 +30,15 @@ import static com.tsits.tsmodel.service.TSCoreCallbackName.TS_CORESERVICE_EVENT_
  */
 
 
-public class VoiceCallingFragmentWaiting extends BackHandledFragment{
+public class VoiceCallingFragmentWaiting extends BackHandledFragment {
 
+    private static final String TAG = "VoiceCallingFragmentWaiting";
     private Button _btnCallhangup_wait;
     private TextView _lblCallTimer_wait;
     private View _ContentView;
 
     private PocSipMsg _PocCallInfo;
+    private Intent intent;
 
     // TODO: Rename and change types of parameters
 
@@ -63,6 +66,8 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
 
 
     private void RegistViewEvent() {
+//        RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) getArguments().getSerializable(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
+
         if (_btnCallhangup_wait != null) {
             _btnCallhangup_wait.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,7 +80,10 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
             });
         }
 
-        _lblCallTimer_wait.setText("本机"+mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId());
+            _lblCallTimer_wait.setText("" + ServiceData.get().CallStatueInfo.getValue().getSrcID());//显示拨打号码
+
+
+
 
     }
 
@@ -90,8 +98,6 @@ public class VoiceCallingFragmentWaiting extends BackHandledFragment{
         RegistViewEvent();
         return _ContentView;
     }
-
-
 
 
 }

@@ -84,7 +84,7 @@ public class CoreServiceClient implements Runnable {
      */
     public boolean connect(){
 
-        //连接服务得监听事件
+        //连接服务的监听事件
         XIPC.setIPCListener(new IPCListener() {
             @Override
             public void onIPCConnected(Class<? extends IPCService> service) {

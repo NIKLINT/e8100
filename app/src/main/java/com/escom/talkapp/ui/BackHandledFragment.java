@@ -1,5 +1,7 @@
 
 package com.escom.talkapp.ui;
+
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import com.tsits.tsmodel.TSITSApplication;
 
 public abstract class BackHandledFragment extends Fragment {
 
+    private static final String TAG = "BackHandledFragment";
     protected BackHandledInterface mBackHandledInterface;
 
     /**
@@ -18,9 +21,11 @@ public abstract class BackHandledFragment extends Fragment {
      * 如果没有Fragment消息时FragmentActivity自己才会消费该事件
      */
     public abstract boolean onBackPressed();
+
     protected TSITSApplication mTSApplication;
 
-    protected TSRunTimeStatusInfo _tmpRuntimeInfo =null;
+    protected TSRunTimeStatusInfo _tmpRuntimeInfo = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,7 @@ public abstract class BackHandledFragment extends Fragment {
             throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
         } else {
             this.mBackHandledInterface = (BackHandledInterface) getActivity();
+            Log.d(TAG, "getActivity() is = " + getActivity());
         }
         InitialRunningStatue();
     }
@@ -36,14 +42,15 @@ public abstract class BackHandledFragment extends Fragment {
     public void onStart() {
         super.onStart();
         //告诉FragmentActivity，当前Fragment在栈顶
-        mBackHandledInterface.setSelectedFragment(this);
+        Log.d(TAG, "mBackHandledInterface.setSelectedFragment(this) is " + this);
+        mBackHandledInterface.setSelectedFragment(this); //this即可获取当前Fragment
     }
 
 
     private boolean InitialRunningStatue() {
         mTSApplication = (TSITSApplication) getActivity().getApplication();
         if (mTSApplication != null) {
-            if(mTSApplication.getCoreService()!=null){
+            if (mTSApplication.getCoreService() != null) {
                 if (mTSApplication.getCoreService().isConnected()) {
                     _tmpRuntimeInfo = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus();
                     return true;
@@ -51,10 +58,10 @@ public abstract class BackHandledFragment extends Fragment {
                     Log.d(this.getClass().getName(), "InitialRunningStatue: Service not Connected");
                     return false;
                 }
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }

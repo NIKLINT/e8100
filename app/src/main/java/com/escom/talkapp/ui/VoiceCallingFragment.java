@@ -35,6 +35,7 @@ import com.tsits.tsmodel.utils.CallStatusDefine;
 import com.tsits.tsmodel.utils.LogUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.ElementType;
 
 import jaygoo.widget.wlv.WaveLineView;
 
@@ -95,7 +96,6 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(this.getClass().getName(), "KeyEventReceiver message:" + intent.getAction().toString());
-            //     mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(0);
         }
     };
 
@@ -146,10 +146,12 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
                 public void onClick(View view) {
                     if (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CALLMODE_RF) {
                         mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(-1);
+                        Log.d(TAG, "onAppModel_HangUpCall -1");
                     } else {
                         ICoreClientCallback clientSDK = mTSApplication.getCoreService().getICoreServiceEvent();
                         if (clientSDK != null) {
                             mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_HangUpCall(1);
+                            Log.d(TAG, "onAppModel_HangUpCall 1");
                             getActivity().finish();
                         }
                     }
@@ -179,7 +181,7 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
         if (ServiceData.get().CurrectCallMode.getValue() == CallModeEnum.TS_CLLMODE_POC) {
             RF_CallStatusUpdate _CallInfo = (RF_CallStatusUpdate) getArguments().getSerializable(TS_CORESERVICE_EVENT_ONPOCCALLSTATUSUPDATE_PARA);
             if (_CallInfo != null) {
-                if (_CallInfo.getCallType()==2) {//POC组呼
+                if (_CallInfo.getCallType() == 2) {//POC组呼
                     ServiceData.get().SessionCalltime.observe(getViewLifecycleOwner(), integer -> {
                         String min = String.format("%02d", integer / 60);
                         String sec = String.format("%02d", integer % 60);
@@ -211,11 +213,8 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
         _acivityContent = _ContentView.findViewById(R.id.linearLayout);
         _btnCallhangup = _ContentView.findViewById(R.id.btnCallhangup);
         mRecordingView = _ContentView.findViewById(R.id.audioRecordView);
-
-
         {
             //当前使用的呼叫模式是窄带呼叫模式　
-
         }
         if (getArguments() != null) {
             String CallEvent = getArguments().getString(TS_CORESERVICE_EVENT);
@@ -259,8 +258,8 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
                     }
                     break;
                     case 3: {
-                        lblWorkType.setText(R.string.TS_WorkType_MPTTrunking);
                         //模拟集群
+                        lblWorkType.setText(R.string.TS_WorkType_MPTTrunking);
                     }
                     break;
                     case 4: {
@@ -276,10 +275,7 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
                 } else {
                     lblWorkType.setText(R.string.TS_WorkType_POC);
                 }
-
-
             }
-
         }
         RegistViewEvent();
 
@@ -296,15 +292,30 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
                 }
                 break;
                 case CALLTYPE_GROUP: {
-                    _txtCallID.setText("呼叫组:" + _CallInfo.getDestID());
+                    Log.d(TAG, " CALLTYPE_GROUP");
+                    _txtCallID.setText("呼叫组:" + _CallInfo.getTalkID());
                 }
                 break;
                 case CALLTYPE_SINGLE: {
-                    if (_CallInfo.getDestID() == _tmpRuntimeInfo.getPdtDeviceID()) {
+                    Log.d(TAG, " CALLTYPE_SINGLE");
+                    Log.d(TAG, " kk._tmpRuntimeInfo.getPdtDeviceID() " + _tmpRuntimeInfo.getPdtDeviceID());
+                    Log.d(TAG, " kk._CallInfo.getDestID() " + _CallInfo.getDestID());
+                    Log.d(TAG, " kk._CallInfo.getSrcID() " + _CallInfo.getSrcID());
+                    Log.d(TAG, " kk.getCallerID() " + mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getCallerID());
+                    Log.d(TAG, " kk.getCallID() " + mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getCallID());
+                    Log.d(TAG, " kk.getCallType() " + mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getCallType());
+
+//                    if (mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getCallType()==0){
+//                        Log.d(TAG, " kk.getCallType() == 0");
+                    if (_CallInfo.getDestID() == _tmpRuntimeInfo.getPdtDeviceID()) { //被呼
                         _txtCallID.setText("单呼者:" + _CallInfo.getSrcID());
-                    } else {
+                    } else if (_CallInfo.getSrcID() == _tmpRuntimeInfo.getPdtDeviceID()) {  //主呼
                         _txtCallID.setText("单呼者:" + _CallInfo.getDestID());
+                    } else {
                     }
+//                }else{
+//                        Log.d(TAG, " kk.getCallType() != 0");
+//                    }
                 }
                 break;
                 case CALLTYPE_PSTN_SINGLE:
@@ -323,7 +334,12 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
             }
         } else if (_CallInfo.getCallMode() == CallModeEnum.TS_CLLMODE_POC) {
             if (_CallInfo.getCallType() == 2) {
-                _txtCallID.setText("呼叫组:"+mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocGroupId());
+                _txtCallID.setText("呼叫组:" + mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocGroupId());
+                if (mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId()
+                        .equals(ServiceData.get().CallStatueInfo.getValue().getDestID())) {
+                    _txtCallerID.setText("" + ServiceData.get().CallStatueInfo.getValue().getSrcID());
+                }
+                ServiceData.get().CurrectPocSessionID.getValue();
             } else {
                 _txtCallID.setText(R.string.CALLTYPE_POCCALL_SINGLE);
             }
@@ -339,32 +355,41 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
         _txtCallID.setSelected(false);
         switch ((byte) _CallInfo.getCallStatus()) {
             case CallStatusDefine.CALLSTATUE_IDLE: {
-                _txtCallerID.setText(R.string.CALLSTATUE_LABEL_IDLE);
-                ShowCallType(_CallInfo);
+                String getPocDeviceId = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId();
+                String getDestID = (new Long(_CallInfo.getDestID())).toString();
+                String getSrcID = (new Long(_CallInfo.getSrcID())).toString();
+                String getTalkID = (new Long(_CallInfo.getTalkID())).toString();
+                if (getPocDeviceId.equals(getDestID)) {//被呼
+                    Log.d(TAG, "_CallInfo.getSrcID=" + getSrcID);
+                    _txtCallerID.setText("" + getTalkID);
+                    ShowCallType(_CallInfo);
+                } else {
+                    _txtCallerID.setText("" + getTalkID);
+                    ShowCallType(_CallInfo);
+                }
             }
             break;
             case CallStatusDefine.CALLSTATUE_CALLING:
             case CALLSTATUE_CRATESESSION: {
                 String getPocDeviceId = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId();
-
                 String getDestID = (new Long(_CallInfo.getDestID())).toString();
                 String getSrcID = (new Long(_CallInfo.getSrcID())).toString();
-                Log.d(TAG,"getDestID.hashCode()"+getDestID.hashCode());
+                Log.d(TAG, "getDestID.hashCode()" + getDestID.hashCode());
                 Log.d(TAG, "_CallInfo.getDestID=" + getDestID + "_CallInfo.getPocDeviceId=" + getPocDeviceId + "_CallInfo.getSrcID=" + getSrcID);
-                if (_CallInfo.getCallType() != 3) {
+                if (_CallInfo.getCallType() != 3) {  // poc组呼
                     if (getPocDeviceId.equals(getDestID)) {//被呼
-                        Log.d(TAG, "_CallInfo.getDestID=" + getDestID);
-                        _txtCallerID.setText(""+getPocDeviceId);
+                        Log.d(TAG, "_CallInfo.getSrcID=" + getSrcID);
+                        _txtCallerID.setText(R.string.CALLSTATUE_LABEL_LOCALTX);
                         ShowCallType(_CallInfo);
                     } else if (getPocDeviceId.equals(getSrcID)) {//主呼
-                        Log.d(TAG, "_CallInfo.getSrcID=" + getSrcID);
-                        _txtCallerID.setText(""+getPocDeviceId);
+                        Log.d(TAG, "_CallInfo.getDestID=" + getDestID);
+                        _txtCallerID.setText(R.string.CALLSTATUE_LABEL_LOCALTX);
                         ShowCallType(_CallInfo);
                     } else {
                         _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
                         ShowCallType(_CallInfo);
                     }
-                }else{
+                } else {
                     _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLING);
                     ShowCallType(_CallInfo);
                 }
@@ -382,19 +407,25 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
             break;
             case CALLSTATUE_LocalTX: {
                 _txtCallerID.setText(R.string.CALLSTATUE_LABEL_LOCALTX);
-
                 ShowCallType(_CallInfo);
             }
             break;
             case CALLSTATUE_LocalRX: {
-
                 ShowCallType(_CallInfo);
                 _txtCallerID.setText(String.valueOf(_CallInfo.getTalkID()));
             }
             break;
             case CALLSTATUE_CALLIDLE: {
-                ShowCallType(_CallInfo);
-                _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLIDLE);
+                String getPocDeviceId = mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPocDeviceId();
+                String getDestID = (new Long(_CallInfo.getDestID())).toString();
+                String getSrcID = (new Long(_CallInfo.getSrcID())).toString();
+                if (getPocDeviceId.equals(getDestID)) {
+                    _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLIDLE);
+                    ShowCallType(_CallInfo);
+                } else {
+                    ShowCallType(_CallInfo);
+                    _txtCallerID.setText(R.string.CALLSTATUE_LABEL_CALLIDLE);
+                }
             }
             break;
             case CALLSTATUE_CALLEND: {
@@ -532,7 +563,6 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
     @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
-
         super.onDestroyView();
     }
 
@@ -543,27 +573,24 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
         //修改显示呼叫者ID
 //        int _CallType = this.getActivity().getIntent().getIntExtra("CallType", 1);//呼叫类型     1----组呼（用于分组呼叫） 2---个呼 （用于联系人的号码呼叫）
 //        int _CallMode = getActivity().getIntent().getIntExtra("CallMode", 2); //呼叫模式，1---窄带集群     2--宽带  3---宽带视频（暂不用）
-//        boolean emergencyCall=getActivity().getIntent().getBooleanExtra("emergencyCall",false);
-
-        if (_CallInfo.getCallPriority() == 4) {
-            _acivityContent.setBackgroundResource(R.drawable.rounded_corner_emergency);
-            //   mRecordingView.setBackgroundResource(R.color.emergency);
-        } else {
-            if (_CallInfo.getCallMode() == CallModeEnum.TS_CALLMODE_RF) {
-                //receive RF CallInfo Update
-                if (_CallInfo.getEncrptFlag() == 0) { // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
-                    _acivityContent.setBackgroundResource(R.drawable.rounded_corner);
-                    // mRecordingView.setBackgroundResource(R.color.backgroundColor);
-                } else if (_CallInfo.getEncrptFlag() == 1) {
+        if (_CallInfo.getCallMode() == CallModeEnum.TS_CALLMODE_RF) {  //窄带呼叫
+            if (_CallInfo.getCallPriority() == 4) {  //紧急呼叫
+                if (_CallInfo.getEncrptFlag() == 1) {  // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
                     _acivityContent.setBackgroundResource(R.drawable.rounded_orange);
+                } else {
+                    _acivityContent.setBackgroundResource(R.drawable.rounded_corner_emergency);
                 }
-            } else {
-                //Receive POC CallInfo Update
-                if (_CallInfo.getCallType() == 1) {
+            } else {  //非紧急呼叫
+                if (_CallInfo.getEncrptFlag() == 1) {  // EncrptFlag   //加密呼叫指示	0-非加密，1-加密
+                    _acivityContent.setBackgroundResource(R.drawable.rounded_orange);
+                } else {
                     _acivityContent.setBackgroundResource(R.drawable.rounded_corner);
-                    //single call
                 }
             }
+        } else {
+            int getCallType = Integer.parseInt(String.valueOf(mTSApplication.getCoreService().getICoreServiceEvent().onAppModel_GetRunningStatus().getPriority()));
+            _acivityContent.setBackgroundResource(R.drawable.rounded_corner);
+
         }
 
 
@@ -633,7 +660,6 @@ public class VoiceCallingFragment extends BackHandledFragment implements ITSCall
 
     @Override
     public void OnResetCallTo(String callId, byte callType, byte emergency) {
-
     }
 
     @Override
