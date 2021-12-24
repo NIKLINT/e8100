@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements BackHandledInterf
     }
 
     @Override
-    protected void onUserLeaveHint() {  //用户点击HOME键会被监听并调用到,解决发射禁止弹出默认界面的问题
+    protected void onUserLeaveHint() {  //用户点击HOME键会被监听并调用到,解决发射禁止弹出默认
         finish();
         super.onUserLeaveHint();
     }
